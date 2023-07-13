@@ -1,1 +1,10 @@
 
+[submodule "pysearch_tool/--name"]
+	path = pysearch_tool/--name
+	url = https://github.com/inlab-geo/cofi.git
+[submodule "pysearch_tool/--force"]
+	path = pysearch_tool/--force
+	url = https://github.com/inlab-geo/cofi.git
+[submodule "pysearch_tool/cofi"]
+	path = pysearch_tool/cofi
+	url = https://github.com/inlab-geo/cofi.git
