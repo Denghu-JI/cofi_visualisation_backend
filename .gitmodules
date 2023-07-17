@@ -8,3 +8,9 @@
 [submodule "pysearch_tool/cofi"]
 	path = pysearch_tool/cofi
 	url = https://github.com/inlab-geo/cofi.git
+[submodule "pysearch_tool/espresso"]
+	path = pysearch_tool/espresso
+	url = https://github.com/Denghu-JI/espresso.git
+[submodule "pysearch_tool/cofi-examples"]
+	path = pysearch_tool/cofi-examples
+	url = https://github.com/Denghu-JI/cofi-examples.git

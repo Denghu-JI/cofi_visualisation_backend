@@ -29,8 +29,6 @@
 #         pygimli_dcip.ipynb <- Newton conjugate gradient trust-region algorithm (trust-ncg) <- scipy.optimize.minimize <- non-linear <- optimization <- parameter estimation <- CoFI
 #         pygimli_dcip.ipynb <- RAdam <- torch.optim <- non-linear <- optimization <- parameter estimation <- CoFI
 
-tokens = {} #key: token id
-textSize = 22
 
 class hirc_tree:
     def __init__(self, me):
@@ -88,8 +86,8 @@ class hirc_tree:
     def to_pos(self):
         return [self.x, self.y,0,0]
 
-def insert(tre, method):
-        lst = method.tree()
+def insert(tre, node):
+        lst = node.tree()
         if len(lst)!= 1:
             token = lst.pop(0)
             if token == tre.me():
@@ -97,114 +95,20 @@ def insert(tre, method):
                 child = lst[0]
                 for tok in tre.children():
                     if child == tok.me():
-                        insert(tok, method)
+                        insert(tok, node)
                         flag = True
                 if not flag:
-                    node = hirc_tree(child)
-                    node.add_parent(token)
-                    insert(node, method)
-                    tre.add_child(node)
+                    btree = hirc_tree(child)
+                    btree.add_parent(token)
+                    insert(btree, node)
+                    tre.add_child(btree)
         else:
-            tre.add_description(method.des())
-            tre.add_path(method.path())
+            tre.add_description(node.des())
+            tre.add_path(node.path())
             
         return tre
 
-def assign_depth(node, current_depth):
-    node.depth = current_depth
-    for child in node.children():
-        assign_depth(child, current_depth + 1)
 
-position_dict = {}
-#-----------------------------------
-def build_pos(node):
-    spreation = 20
-    if node.depth in position_dict.keys():
-        position_dict[node.depth].append(node)
-    else: 
-        position_dict[node.depth] = [node]
-    if node.children():
-        for i in node.children():
-            build_pos(i)
-
-    for i in position_dict.keys():
-        for j in position_dict[i]:
-            j.x = 5201314
-    return position_dict
-
-
-#-------------------------------------
-def create_layers(node):
-    layers = {}
-    assign_depth(node, 0)
-
-    def add_to_layer(node):
-        depth = node.depth
-        if depth not in layers:
-            layers[depth] = []
-        layers[depth].append(node)
-
-        for child in node.children():
-            add_to_layer(child)
-
-    add_to_layer(node)
-    return layers
-
-def assign_coordinates(tree, separation_x=20, separation_y=150):
-    layers = create_layers(tree)
-    res = []
-    center = 0
-    temp_parent_node_x = {}
-    for layer in list(layers.keys())[::-1]:
-        assign_node_in_layer(layers[layer],center,separation_x)
-
-
-def assign_node_in_layer(nodes, center, separation_x):
-    for node in nodes:
-        print(node.me())
-
-    layter_width = sum([max(node.width, node.ch_width) for node in nodes]) + (len(nodes) - 1) * separation_x
-    start_x = center - layter_width / 2
-    for node in nodes:
-        print(start_x)
-        if (node.x) :
-            start_x += node.ch_width
-        else:
-            node.x = start_x
-            start_x += max(node.width, node.ch_width) + separation_x
-
-
-
-
-def dict_package(node):
-    res = {}
-    load_to_dict(node,res)
-    offsetX = 150 - res[node.me()][0]
-    offsetY = 120 - res[node.me()][1]
-    for i in res.values():
-        i[0] += offsetX
-        i[1] += offsetY
-    
-    return res
-
-def load_to_dict(node, res):
-    res[node.me()] = node.to_pos()
-    for i in node.children():
-        load_to_dict(i, res)
-#----------------------
-
-def description(node):
-    res = {}
-    pack_des(res,node)
-    return res
-
-def pack_des(dict,node):
-    dict[node.me()] = node.description()
-    if node.children():
-        for i in node.children():
-            pack_des(dict,i)
-
-#-------------------------
 def relation_dict(node):
     return relation_pack(node)
 
@@ -221,19 +125,5 @@ def relation_pack(node):
     return node_dict
 
 
-
-
-
 #------------------------
 
-
-# tokens1 = ['cofi_simple_newton', 'simple Newton step', 'InLab', 'non-linear', 'optimization', 'parameter estimation', 'CoFI']
-# tokens2 = ['pygimli_dcip_century_tri_mesh.ipynb', 'Newton conjugate gradient trust-region algorithm (trust-ncg)', 'scipy.optimize.minimize',  'non-linear', 'optimization', 'parameter estimation', 'CoFI']
-
-# tre = hirc_tree('CoFI', [])
-
-# t = insert(tre, tokens1[::-1])
-# t1 = insert(t, tokens1[::-1])
-
-
-# print(t1.children()[0].children()[0].me())

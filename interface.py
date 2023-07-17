@@ -1,5 +1,5 @@
 from relation_dict import hirc_tree, insert, assign_depth, build_pos, assign_coordinates, dict_package, description, relation_dict
-from pysearch_tool import pysearch
+from pysearch_tool import dir_search
 import json
 import boto3
 
@@ -16,7 +16,7 @@ ignore = []
 
 
 def main():
-    p = pysearch.pysearch(methods_path,applications_path,problems_path)
+    p = dir_search.pysearch(methods_path,applications_path,problems_path)
     p._search()
     method_tree = hirc_tree('CoFI')
     apps_tree = hirc_tree('37 Earth Sciences')
@@ -75,7 +75,7 @@ def main():
 
 if __name__ == "__main__": 
     # main()
-    p = pysearch.pysearch(methods_path,applications_path,problems_path)
+    p = dir_search.pysearch(methods_path,applications_path,problems_path)
     p._search()
     method_tree = hirc_tree('CoFI')
     apps_tree = hirc_tree('37 Earth Sciences')
