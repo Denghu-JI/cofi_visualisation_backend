@@ -48,6 +48,7 @@ class hirc_tree:
         self._parent = None
         self._path = None
         self._description = None
+        self._examples = []
 
         #---graphics property
         self.x = None
@@ -83,10 +84,20 @@ class hirc_tree:
     def path(self):
         return self._path
 
-    def to_pos(self):
-        return [self.x, self.y,0,0]
+    def examples(self):
+        return self._examples
+
+    def add_examples(self, e):
+        for i in e:
+            if i['name'] not in [j['name'] for j in self._examples]:
+                self._examples.append(i)
 
 def insert(tre, node):
+        try:
+            tre.add_examples(node.examples())
+        except Exception as e:
+            # print(e)
+            pass
         lst = node.tree()
         if len(lst)!= 1:
             token = lst.pop(0)
@@ -109,6 +120,8 @@ def insert(tre, node):
         return tre
 
 
+
+
 def relation_dict(node):
     return relation_pack(node)
 
@@ -116,7 +129,9 @@ def relation_pack(node):
     node_dict = {}
     node_dict["name"] = node.me()
     node_dict["link_git"] = node.path()
-    node_dict["link_doc"] = "www.google.com.au"
+    # node_dict["link_doc"] = "https://www.google.com.au"
+    if node.examples():
+        node_dict["examples"] = node.examples()
     node_dict["children"] = []
     node_dict["description"] = node.description()
     if node.children():
